@@ -1,7 +1,7 @@
 package com.example.adopet.util;
 
-import com.example.adopet.controller.dto.validation.BeanValidationDTO;
-import com.example.adopet.controller.dto.validation.ExceptionInfoWithFieldsDTO;
+import com.example.adopet.dto.validation.BeanValidationDTO;
+import com.example.adopet.dto.validation.ExceptionInfoWithFieldsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -29,7 +29,7 @@ public class BeanValidationHandler {
     public ExceptionInfoWithFieldsDTO handleBind(BindException exception) {
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         ExceptionInfoWithFieldsDTO exceptionInfoWithFieldsDTO = formatException(exception, fieldErrors);
-        exceptionInfoWithFieldsDTO.setType("MethodArgumentNotValidException");
+        exceptionInfoWithFieldsDTO.setError("MethodArgumentNotValidException");
         return exceptionInfoWithFieldsDTO;
 
     }

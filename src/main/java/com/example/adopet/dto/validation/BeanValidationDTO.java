@@ -1,4 +1,4 @@
-package com.example.adopet.controller.dto.validation;
+package com.example.adopet.dto.validation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
