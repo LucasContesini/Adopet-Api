@@ -1,5 +1,6 @@
 package com.example.adopet.model.auth;
 
+import com.example.adopet.model.animal.Animal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,8 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Perfil> perfis = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Animal> animals;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

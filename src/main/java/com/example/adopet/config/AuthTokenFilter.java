@@ -1,7 +1,7 @@
 package com.example.adopet.config;
 
 import com.example.adopet.model.auth.User;
-import com.example.adopet.repository.UserRepository;
+import com.example.adopet.repository.auth.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;

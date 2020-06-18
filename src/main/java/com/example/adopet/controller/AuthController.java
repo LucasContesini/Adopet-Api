@@ -3,7 +3,7 @@ package com.example.adopet.controller;
 import com.example.adopet.dto.auth.LoginDTO;
 import com.example.adopet.dto.auth.TokenDTO;
 import com.example.adopet.dto.validation.ExceptionInfoDTO;
-import com.example.adopet.service.AuthService;
+import com.example.adopet.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
