@@ -1,6 +1,7 @@
 package com.example.adopet.service.animal;
 
 import com.example.adopet.dto.CreateAnimalDTO;
+import com.example.adopet.dto.animal.AnimalListDTO;
 import com.example.adopet.model.animal.Animal;
 import com.example.adopet.model.animal.AnimalType;
 import com.example.adopet.model.animal.Image;
@@ -10,11 +11,13 @@ import com.example.adopet.repository.animal.AnimalTypeRepository;
 import com.example.adopet.repository.animal.ImageRepository;
 import com.example.adopet.service.auth.UserService;
 import com.example.adopet.util.exception.DataNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,8 @@ public class AnimalServiceImpl implements AnimalService {
     private ImageRepository imageRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public List<AnimalType> findAllAnimalType() {
@@ -67,5 +72,23 @@ public class AnimalServiceImpl implements AnimalService {
         List<Image> savedImages = imageRepository.saveAll(images);
         animalSaved.setImages(savedImages);
         return animalSaved;
+    }
+
+    @Override
+    public List<AnimalListDTO> findAllAnimal() {
+        List<Animal> animals = animalRepository.findAll();
+        if (animals.isEmpty())
+            return Collections.emptyList();
+        List<AnimalListDTO> animalListDTOS = new ArrayList<>();
+        animals.forEach(animal -> {
+            AnimalListDTO animalListDTO = objectMapper.convertValue(animal, AnimalListDTO.class);
+            try {
+                animalListDTO.setImage(animal.getImages().get(0).getUrl());
+            } catch (Exception e) {
+                animalListDTO.setImage("");
+            }
+            animalListDTOS.add(animalListDTO);
+        });
+        return animalListDTOS;
     }
 }

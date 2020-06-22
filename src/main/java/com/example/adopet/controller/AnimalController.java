@@ -1,6 +1,7 @@
 package com.example.adopet.controller;
 
 import com.example.adopet.dto.CreateAnimalDTO;
+import com.example.adopet.dto.animal.AnimalListDTO;
 import com.example.adopet.dto.validation.ExceptionInfoDTO;
 import com.example.adopet.model.animal.Animal;
 import com.example.adopet.model.animal.AnimalType;
@@ -38,6 +39,16 @@ public class AnimalController {
             return ResponseEntity.ok(animal);
         } catch (DataNotFoundException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionInfoDTO(e));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity findAllAnimal() {
+        try {
+            List<AnimalListDTO> allAnimal = animalService.findAllAnimal();
+            return ResponseEntity.ok(allAnimal);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
         }
