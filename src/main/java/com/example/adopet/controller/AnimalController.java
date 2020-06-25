@@ -1,6 +1,7 @@
 package com.example.adopet.controller;
 
 import com.example.adopet.dto.CreateAnimalDTO;
+import com.example.adopet.dto.animal.AnimalInfoDTO;
 import com.example.adopet.dto.animal.AnimalListDTO;
 import com.example.adopet.dto.validation.ExceptionInfoDTO;
 import com.example.adopet.model.animal.Animal;
@@ -49,6 +50,16 @@ public class AnimalController {
         try {
             List<AnimalListDTO> allAnimal = animalService.findAllAnimal();
             return ResponseEntity.ok(allAnimal);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable int id) {
+        try {
+            AnimalInfoDTO animal = animalService.findById(id);
+            return ResponseEntity.ok(animal);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
         }

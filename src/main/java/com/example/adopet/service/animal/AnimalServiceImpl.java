@@ -1,6 +1,7 @@
 package com.example.adopet.service.animal;
 
 import com.example.adopet.dto.CreateAnimalDTO;
+import com.example.adopet.dto.animal.AnimalInfoDTO;
 import com.example.adopet.dto.animal.AnimalListDTO;
 import com.example.adopet.model.animal.Animal;
 import com.example.adopet.model.animal.AnimalType;
@@ -90,5 +91,26 @@ public class AnimalServiceImpl implements AnimalService {
             animalListDTOS.add(animalListDTO);
         });
         return animalListDTOS;
+    }
+
+    @Override
+    public AnimalInfoDTO findById(int id) {
+        Optional<Animal> optionalAnimal = animalRepository.findById(id);
+        if(!optionalAnimal.isPresent()) {
+            return null;
+        }
+        Animal animal = optionalAnimal.get();
+        AnimalInfoDTO animalInfoDTO = objectMapper.convertValue(animal, AnimalInfoDTO.class);
+        try {
+            animalInfoDTO.setType(animal.getAnimalType().getName());
+        } catch (NullPointerException e) {
+            animalInfoDTO.setType("");
+        }
+        try {
+            animalInfoDTO.setUrl(animal.getImages().get(0).getUrl());
+        } catch (IndexOutOfBoundsException e) {
+            animalInfoDTO.setUrl(null);
+        }
+        return animalInfoDTO;
     }
 }
