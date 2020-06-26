@@ -28,6 +28,7 @@ public class Animal {
     private String description;
     private boolean vaccinated;
     private boolean castrated;
+    private boolean adopted;
     private String zipCode;
 
     @ManyToOne
@@ -37,4 +38,7 @@ public class Animal {
     private AnimalType animalType;
     @OneToMany(mappedBy = "animal")
     private List<Image> images;
+    @OneToMany(mappedBy = "animal")
+    private List<Follow> follows;
+
 }

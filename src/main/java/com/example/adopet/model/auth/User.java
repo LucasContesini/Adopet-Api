@@ -1,6 +1,7 @@
 package com.example.adopet.model.auth;
 
 import com.example.adopet.model.animal.Animal;
+import com.example.adopet.model.animal.Follow;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,8 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Animal> animals;
+    @OneToMany(mappedBy = "user")
+    private List<Follow> follows;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

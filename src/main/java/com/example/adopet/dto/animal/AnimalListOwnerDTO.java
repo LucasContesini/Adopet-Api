@@ -7,12 +7,9 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class AnimalListDTO implements Serializable {
+public class AnimalListOwnerDTO implements Serializable {
     private int id;
     private String name;
-    private boolean vaccinated;
-    private boolean castrated;
     private String image;
-    private boolean liked;
-    private boolean loved;
+    private boolean adopted;
 }

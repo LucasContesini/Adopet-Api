@@ -11,4 +11,5 @@ public interface UserService {
     UserDTO createUser(User user);
     UserDTO getOwnInfo(HttpServletRequest httpServletRequest);
     User getUserInfo(HttpServletRequest httpServletRequest);
+    User getById(int id);
 }

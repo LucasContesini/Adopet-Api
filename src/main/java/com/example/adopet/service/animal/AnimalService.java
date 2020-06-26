@@ -3,8 +3,10 @@ package com.example.adopet.service.animal;
 import com.example.adopet.dto.CreateAnimalDTO;
 import com.example.adopet.dto.animal.AnimalInfoDTO;
 import com.example.adopet.dto.animal.AnimalListDTO;
+import com.example.adopet.dto.animal.AnimalListOwnerDTO;
 import com.example.adopet.model.animal.Animal;
 import com.example.adopet.model.animal.AnimalType;
+import com.example.adopet.model.animal.Follow;
 import com.example.adopet.util.exception.DataNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,13 @@ import java.util.List;
 public interface AnimalService {
     List<AnimalType> findAllAnimalType();
     Animal saveAnimal(CreateAnimalDTO animalDTO, HttpServletRequest httpServletRequest) throws DataNotFoundException;
-    List<AnimalListDTO> findAllAnimal();
-    AnimalInfoDTO findById(int id);
+    List<AnimalListDTO> findAllAnimal(int id);
+    List<AnimalListOwnerDTO> findAllOwnedAnimal(HttpServletRequest httpServletRequest);
+    AnimalInfoDTO findById(int id, HttpServletRequest httpServletRequest);
+    Follow likeAnimal(int userId, int animalId, boolean isLiked);
+    Follow loveAnimal(int userId, int animalId, boolean isLoved);
+
+    Animal adoptAnimal(int animalId) throws DataNotFoundException;
+
+    void deleteAnimal(int animalId);
 }
