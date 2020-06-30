@@ -82,6 +82,44 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
+    public Animal updateAnimal(int id, CreateAnimalDTO animalDTO, HttpServletRequest httpServletRequest) throws DataNotFoundException {
+        User user = userService.getUserInfo(httpServletRequest);
+        if (user == null) {
+            throw new DataNotFoundException(DataNotFoundException.USER_NOT_FOUND);
+        }
+        Optional<AnimalType> animalType = animalTypeRepository.findById(animalDTO.getTypeId());
+        Optional<Animal> optAnimal = animalRepository.findById(id);
+        if(!optAnimal.isPresent())
+            throw new DataNotFoundException(DataNotFoundException.ANIMAL_NOT_FOUND);
+        Animal animal = optAnimal.get();
+        animal.setUser(user);
+        animalType.ifPresent(animal::setAnimalType);
+        animal.setName(animalDTO.getName());
+        animal.setBreed(animalDTO.getBreed());
+        animal.setBirthDate(animalDTO.getBirthDate());
+        animal.setCastrated(animalDTO.isCastrated());
+        animal.setVaccinated(animalDTO.isVaccinated());
+        animal.setDescription(animalDTO.getDescription());
+        animal.setZipCode(animalDTO.getZipCode());
+
+        Animal animalSaved = animalRepository.save(animal);
+
+
+        List<Image> images = imageRepository.findAllByAnimal(animal);
+        images.forEach(image -> imageRepository.delete(image));
+        images.clear();
+        animalDTO.getImages().forEach(image -> {
+            Image newImage = new Image();
+            newImage.setAnimal(animalSaved);
+            newImage.setUrl(image);
+            images.add(newImage);
+        });
+        List<Image> savedImages = imageRepository.saveAll(images);
+        animalSaved.setImages(savedImages);
+        return animalSaved;
+    }
+
+    @Override
     public List<AnimalListDTO> findAllAnimal(int id) {
         List<Animal> animals = animalRepository.findAll();
         if (animals.isEmpty())
@@ -145,7 +183,8 @@ public class AnimalServiceImpl implements AnimalService {
             animalInfoDTO.setType("");
         }
         try {
-            animalInfoDTO.setUrl(animal.getImages().get(0).getUrl());
+            animalInfoDTO.setUrl(new ArrayList<>());
+            animal.getImages().forEach(image -> animalInfoDTO.getUrl().add(image.getUrl()));
         } catch (IndexOutOfBoundsException e) {
             animalInfoDTO.setUrl(null);
         }
@@ -177,7 +216,7 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public Animal adoptAnimal(int animalId) throws DataNotFoundException {
         Optional<Animal> optAnimal = animalRepository.findById(animalId);
-        if(!optAnimal.isPresent())
+        if (!optAnimal.isPresent())
             throw new DataNotFoundException(DataNotFoundException.ANIMAL_NOT_FOUND);
         Animal animal = optAnimal.get();
         animal.setAdopted(true);
@@ -186,7 +225,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public void deleteAnimal(int animalId) {
+    public void deleteAnimal(int animalId) throws DataNotFoundException {
         animalRepository.deleteById(animalId);
     }
 

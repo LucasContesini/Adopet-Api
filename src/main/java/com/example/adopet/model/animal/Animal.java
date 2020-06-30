@@ -36,9 +36,9 @@ public class Animal {
     private User user;
     @ManyToOne
     private AnimalType animalType;
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "animal")
     private List<Image> images;
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, mappedBy = "animal")
     private List<Follow> follows;
 
 }

@@ -48,7 +48,19 @@ public class AnimalController {
         }
     }
 
-    @PutMapping("/{animalId}")
+    @PutMapping("/{id}")
+    public ResponseEntity updateAnimal(@PathVariable int id, @RequestBody CreateAnimalDTO createAnimalDTO, HttpServletRequest httpServletRequest) {
+        try {
+            Animal animal = animalService.updateAnimal(id, createAnimalDTO, httpServletRequest);
+            return ResponseEntity.ok(animal);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionInfoDTO(e));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
+        }
+    }
+
+    @PutMapping("/adopt/{animalId}")
     public ResponseEntity adoptAnimal(@PathVariable int animalId) {
         try {
             Animal animal = animalService.adoptAnimal(animalId);

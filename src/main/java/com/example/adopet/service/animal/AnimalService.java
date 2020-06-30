@@ -17,6 +17,7 @@ import java.util.List;
 public interface AnimalService {
     List<AnimalType> findAllAnimalType();
     Animal saveAnimal(CreateAnimalDTO animalDTO, HttpServletRequest httpServletRequest) throws DataNotFoundException;
+    Animal updateAnimal(int id, CreateAnimalDTO animalDTO, HttpServletRequest httpServletRequest) throws DataNotFoundException;
     List<AnimalListDTO> findAllAnimal(int id);
     List<AnimalListOwnerDTO> findAllOwnedAnimal(HttpServletRequest httpServletRequest);
     AnimalInfoDTO findById(int id, HttpServletRequest httpServletRequest);
@@ -25,5 +26,5 @@ public interface AnimalService {
 
     Animal adoptAnimal(int animalId) throws DataNotFoundException;
 
-    void deleteAnimal(int animalId);
+    void deleteAnimal(int animalId) throws DataNotFoundException;
 }
