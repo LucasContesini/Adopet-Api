@@ -18,7 +18,7 @@ public class AnimalInfoDTO implements Serializable {
     private String description;
     private boolean vaccinated;
     private boolean castrated;
-    private String zipCode;
+    private String city;
     private List<String> url;
     private boolean liked;
     private boolean loved;

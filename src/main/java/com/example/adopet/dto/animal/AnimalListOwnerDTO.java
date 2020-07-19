@@ -11,5 +11,5 @@ public class AnimalListOwnerDTO implements Serializable {
     private int id;
     private String name;
     private String image;
-    private boolean adopted;
+    private String type;
 }

@@ -29,7 +29,7 @@ public class Animal {
     private boolean vaccinated;
     private boolean castrated;
     private boolean adopted;
-    private String zipCode;
+    private String city;
 
     @ManyToOne
     @JsonIgnore

@@ -103,9 +103,9 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity findAllAnimal(@RequestParam int id) {
+    public ResponseEntity findAllAnimal(@RequestParam int id, @RequestParam(required = false) String city, @RequestParam(required = false) Integer type, @RequestParam boolean vaccinated, @RequestParam boolean castrated) {
         try {
-            List<AnimalListDTO> allAnimal = animalService.findAllAnimal(id);
+            List<AnimalListDTO> allAnimal = animalService.findAllAnimal(id, city, type, vaccinated, castrated);
             return ResponseEntity.ok(allAnimal);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));

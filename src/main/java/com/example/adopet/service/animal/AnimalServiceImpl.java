@@ -65,7 +65,7 @@ public class AnimalServiceImpl implements AnimalService {
         animal.setCastrated(animalDTO.isCastrated());
         animal.setVaccinated(animalDTO.isVaccinated());
         animal.setDescription(animalDTO.getDescription());
-        animal.setZipCode(animalDTO.getZipCode());
+        animal.setCity(animalDTO.getCity());
 
         Animal animalSaved = animalRepository.save(animal);
 
@@ -100,7 +100,7 @@ public class AnimalServiceImpl implements AnimalService {
         animal.setCastrated(animalDTO.isCastrated());
         animal.setVaccinated(animalDTO.isVaccinated());
         animal.setDescription(animalDTO.getDescription());
-        animal.setZipCode(animalDTO.getZipCode());
+        animal.setCity(animalDTO.getCity());
 
         Animal animalSaved = animalRepository.save(animal);
 
@@ -120,7 +120,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public List<AnimalListDTO> findAllAnimal(int id) {
+    public List<AnimalListDTO> findAllAnimal(int id, String city, Integer type, boolean vaccinated, boolean castrated) {
         List<Animal> animals = animalRepository.findAll();
         if (animals.isEmpty())
             return Collections.emptyList();
@@ -158,7 +158,12 @@ public class AnimalServiceImpl implements AnimalService {
             AnimalListOwnerDTO animalListOwnerDTO = new AnimalListOwnerDTO();
             animalListOwnerDTO.setId(animal.getId());
             animalListOwnerDTO.setName(animal.getName());
-            animalListOwnerDTO.setAdopted(animal.isAdopted());
+
+            try {
+                animalListOwnerDTO.setType(animal.getAnimalType().getName());
+            } catch (Exception e) {
+                animalListOwnerDTO.setType("");
+            }
             try {
                 animalListOwnerDTO.setImage(animal.getImages().get(0).getUrl());
             } catch (IndexOutOfBoundsException e) {
