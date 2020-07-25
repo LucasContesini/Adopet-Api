@@ -30,6 +30,7 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private String nickname;
+    private String uid;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Perfil> perfis = new ArrayList<>();

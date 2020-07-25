@@ -2,6 +2,8 @@ package com.example.adopet.service.auth;
 
 import com.example.adopet.config.JWTService;
 import com.example.adopet.dto.UserDTO;
+import com.example.adopet.dto.auth.FirebaseUserDTO;
+import com.example.adopet.model.auth.FirebaseConfig;
 import com.example.adopet.model.auth.Perfil;
 import com.example.adopet.model.auth.User;
 import com.example.adopet.repository.auth.PerfilRepository;
@@ -26,6 +28,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JWTService jwtService;
 
+
+
     @Override
     public UserDTO createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()) != null)
@@ -34,6 +38,11 @@ public class UserServiceImpl implements UserService {
         user.setUsername(user.getEmail());
         Perfil perfil = perfilRepository.findByName("USER");
         user.setPerfis(Collections.singletonList(perfil));
+        FirebaseConfig firebaseConfig = new FirebaseConfig();
+        FirebaseUserDTO firebaseUserInfo = firebaseConfig.createFirebaseUserInfo(user.getEmail(), user.getPassword());
+        if(firebaseUserInfo != null) {
+            user.setUid(firebaseUserInfo.getUid())  ;
+        }
         User save = userRepository.save(user);
         UserDTO userDTO = objectMapper.convertValue(save, UserDTO.class);
         return userDTO;
@@ -44,7 +53,7 @@ public class UserServiceImpl implements UserService {
         String token = jwtService.getToken(httpServletRequest);
         int userId = jwtService.getUserId(token);
         User user = userRepository.findById(userId);
-        UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getNickname());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getNickname(), user.getUid());
         return userDTO;
     }
 

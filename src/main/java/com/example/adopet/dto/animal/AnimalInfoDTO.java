@@ -1,5 +1,6 @@
 package com.example.adopet.dto.animal;
 
+import com.example.adopet.dto.UserDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +23,5 @@ public class AnimalInfoDTO implements Serializable {
     private List<String> url;
     private boolean liked;
     private boolean loved;
+    private UserDTO user;
 }

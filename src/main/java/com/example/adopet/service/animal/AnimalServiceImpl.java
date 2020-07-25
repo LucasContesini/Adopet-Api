@@ -125,7 +125,12 @@ public class AnimalServiceImpl implements AnimalService {
         if (animals.isEmpty())
             return Collections.emptyList();
         List<AnimalListDTO> animalListDTOS = new ArrayList<>();
-        animals.forEach(animal -> {
+        animals.stream().
+                filter(animal -> vaccinated ? animal.isVaccinated() : animal != null).
+                filter(animal -> castrated ? animal.isCastrated() : animal != null).
+                filter(animal ->  !city.isEmpty() ? animal.getCity().equals(city) : animal != null).
+                filter(animal -> type != 0 ? animal.getAnimalType().getId() == type : animal != null).
+                forEach(animal -> {
             AnimalListDTO animalListDTO = new AnimalListDTO();
             animalListDTO.setId(animal.getId());
             animalListDTO.setName(animal.getName());
@@ -136,6 +141,8 @@ public class AnimalServiceImpl implements AnimalService {
             } catch (Exception e) {
                 animalListDTO.setImage("");
             }
+            UserDTO owner = objectMapper.convertValue(animal.getUser(), UserDTO.class);
+            animalListDTO.setUser(owner);
             Follow follow = animal.getFollows().stream().filter(flw -> flw.getUser().getId() == id).findAny().orElse(null);
             if (follow != null) {
                 animalListDTO.setLiked(follow.isLiked());
@@ -199,6 +206,8 @@ public class AnimalServiceImpl implements AnimalService {
             animalInfoDTO.setLiked(follow.isLiked());
             animalInfoDTO.setLoved(follow.isLoved());
         }
+        UserDTO owner = objectMapper.convertValue(animal.getUser(), UserDTO.class);
+        animalInfoDTO.setUser(owner);
         return animalInfoDTO;
     }
 
