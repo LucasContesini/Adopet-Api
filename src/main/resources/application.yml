@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/adopet?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
-    username: root
+    url: jdbc:mysql://adopet.colekckgvkoc.us-east-1.rds.amazonaws.com:3306/adopet?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+    username: admin
     password: 8uk6kwqi
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always

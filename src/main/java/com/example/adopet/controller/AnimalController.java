@@ -112,6 +112,26 @@ public class AnimalController {
         }
     }
 
+    @GetMapping("/interested")
+    public ResponseEntity findAllInterestedAnimal(HttpServletRequest httpServletRequest) {
+        try {
+            List<AnimalListDTO> allAnimal = animalService.findAllInterestedAnimal(httpServletRequest);
+            return ResponseEntity.ok(allAnimal);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
+        }
+    }
+
+    @GetMapping("/adopted")
+    public ResponseEntity findAllByUserIdAndAdoptedTrue(HttpServletRequest httpServletRequest) {
+        try {
+            List<AnimalListDTO> allAnimal = animalService.findAllByUserIdAndAdoptedTrue(httpServletRequest);
+            return ResponseEntity.ok(allAnimal);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));
+        }
+    }
+
     @GetMapping("/owner")
     public ResponseEntity findAllOwnedAnimal(HttpServletRequest httpServletRequest) {
         try {
@@ -122,10 +142,10 @@ public class AnimalController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable int id, HttpServletRequest httpServletRequest) {
+    @GetMapping("/{id}/user/{userId}")
+    public ResponseEntity findById(@PathVariable int id, @PathVariable int userId) {
         try {
-            AnimalInfoDTO animal = animalService.findById(id, httpServletRequest);
+            AnimalInfoDTO animal = animalService.findById(id, userId);
             return ResponseEntity.ok(animal);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionInfoDTO(e));

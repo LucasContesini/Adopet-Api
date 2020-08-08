@@ -19,8 +19,10 @@ public interface AnimalService {
     Animal saveAnimal(CreateAnimalDTO animalDTO, HttpServletRequest httpServletRequest) throws DataNotFoundException;
     Animal updateAnimal(int id, CreateAnimalDTO animalDTO, HttpServletRequest httpServletRequest) throws DataNotFoundException;
     List<AnimalListDTO> findAllAnimal(int id, String city, Integer type, boolean vaccinated, boolean castrated);
+    List<AnimalListDTO> findAllInterestedAnimal(HttpServletRequest httpServletRequest);
+    List<AnimalListDTO> findAllByUserIdAndAdoptedTrue(HttpServletRequest httpServletRequest);
     List<AnimalListOwnerDTO> findAllOwnedAnimal(HttpServletRequest httpServletRequest);
-    AnimalInfoDTO findById(int id, HttpServletRequest httpServletRequest);
+    AnimalInfoDTO findById(int id, int userId);
     Follow likeAnimal(int userId, int animalId, boolean isLiked);
     Follow loveAnimal(int userId, int animalId, boolean isLoved);
 

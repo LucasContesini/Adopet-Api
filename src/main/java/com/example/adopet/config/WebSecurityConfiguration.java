@@ -35,7 +35,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/oauth/token/**", "/user/**", "/auth/**")
+        http.authorizeRequests().antMatchers("/oauth/token/**", "/user/**", "/auth/**", "/animal/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()

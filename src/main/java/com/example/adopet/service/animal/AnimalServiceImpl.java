@@ -129,7 +129,8 @@ public class AnimalServiceImpl implements AnimalService {
                 filter(animal -> vaccinated ? animal.isVaccinated() : animal != null).
                 filter(animal -> castrated ? animal.isCastrated() : animal != null).
                 filter(animal ->  !city.isEmpty() ? animal.getCity().equals(city) : animal != null).
-                filter(animal -> type != 0 ? animal.getAnimalType().getId() == type : animal != null).
+                filter(animal -> type != null ? animal.getAnimalType().getId() == type : animal != null).
+                filter(animal -> animal.getUser().getId() != id).
                 forEach(animal -> {
             AnimalListDTO animalListDTO = new AnimalListDTO();
             animalListDTO.setId(animal.getId());
@@ -144,6 +145,68 @@ public class AnimalServiceImpl implements AnimalService {
             UserDTO owner = objectMapper.convertValue(animal.getUser(), UserDTO.class);
             animalListDTO.setUser(owner);
             Follow follow = animal.getFollows().stream().filter(flw -> flw.getUser().getId() == id).findAny().orElse(null);
+            if (follow != null) {
+                animalListDTO.setLiked(follow.isLiked());
+                animalListDTO.setLoved(follow.isLoved());
+            }
+            animalListDTOS.add(animalListDTO);
+        });
+        return animalListDTOS;
+    }
+
+    @Override
+    public List<AnimalListDTO> findAllInterestedAnimal(HttpServletRequest httpServletRequest) {
+        UserDTO user = userService.getOwnInfo(httpServletRequest);
+        if(user == null) {
+            return Collections.emptyList();
+        }
+        List<Animal> interestedAnimals = animalRepository.findAllByLikedOrLoved(user.getId());
+        List<AnimalListDTO> animalListDTOS = new ArrayList<>();
+        interestedAnimals.forEach(animal -> {
+            AnimalListDTO animalListDTO = new AnimalListDTO();
+            animalListDTO.setId(animal.getId());
+            animalListDTO.setName(animal.getName());
+            animalListDTO.setCastrated(animal.isCastrated());
+            animalListDTO.setVaccinated(animal.isVaccinated());
+            try {
+                animalListDTO.setImage(animal.getImages().get(0).getUrl());
+            } catch (Exception e) {
+                animalListDTO.setImage("");
+            }
+            UserDTO owner = objectMapper.convertValue(animal.getUser(), UserDTO.class);
+            animalListDTO.setUser(owner);
+            Follow follow = animal.getFollows().stream().filter(flw -> flw.getUser().getId() == user.getId()).findAny().orElse(null);
+            if (follow != null) {
+                animalListDTO.setLiked(follow.isLiked());
+                animalListDTO.setLoved(follow.isLoved());
+            }
+            animalListDTOS.add(animalListDTO);
+        });
+        return animalListDTOS;
+    }
+
+    @Override
+    public List<AnimalListDTO> findAllByUserIdAndAdoptedTrue(HttpServletRequest httpServletRequest) {
+        UserDTO user = userService.getOwnInfo(httpServletRequest);
+        if(user == null) {
+            return Collections.emptyList();
+        }
+        List<Animal> adoptedAnimals = animalRepository.findAllByUserIdAndAdoptedTrue(user.getId());
+        List<AnimalListDTO> animalListDTOS = new ArrayList<>();
+        adoptedAnimals.forEach(animal -> {
+            AnimalListDTO animalListDTO = new AnimalListDTO();
+            animalListDTO.setId(animal.getId());
+            animalListDTO.setName(animal.getName());
+            animalListDTO.setCastrated(animal.isCastrated());
+            animalListDTO.setVaccinated(animal.isVaccinated());
+            try {
+                animalListDTO.setImage(animal.getImages().get(0).getUrl());
+            } catch (Exception e) {
+                animalListDTO.setImage("");
+            }
+            UserDTO owner = objectMapper.convertValue(animal.getUser(), UserDTO.class);
+            animalListDTO.setUser(owner);
+            Follow follow = animal.getFollows().stream().filter(flw -> flw.getUser().getId() == user.getId()).findAny().orElse(null);
             if (follow != null) {
                 animalListDTO.setLiked(follow.isLiked());
                 animalListDTO.setLoved(follow.isLoved());
@@ -182,7 +245,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalInfoDTO findById(int id, HttpServletRequest httpServletRequest) {
+    public AnimalInfoDTO findById(int id, int userId) {
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
         if (!optionalAnimal.isPresent()) {
             return null;
@@ -200,8 +263,7 @@ public class AnimalServiceImpl implements AnimalService {
         } catch (IndexOutOfBoundsException e) {
             animalInfoDTO.setUrl(null);
         }
-        UserDTO user = userService.getOwnInfo(httpServletRequest);
-        Follow follow = animal.getFollows().stream().filter(flw -> flw.getUser().getId() == user.getId()).findAny().orElse(null);
+        Follow follow = animal.getFollows().stream().filter(flw -> flw.getUser().getId() == userId).findAny().orElse(null);
         if (follow != null) {
             animalInfoDTO.setLiked(follow.isLiked());
             animalInfoDTO.setLoved(follow.isLoved());
