@@ -121,7 +121,7 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public List<AnimalListDTO> findAllAnimal(int id, String city, Integer type, boolean vaccinated, boolean castrated) {
-        List<Animal> animals = animalRepository.findAll();
+        List<Animal> animals = animalRepository.findAllByAdoptedFalse();
         if (animals.isEmpty())
             return Collections.emptyList();
         List<AnimalListDTO> animalListDTOS = new ArrayList<>();
